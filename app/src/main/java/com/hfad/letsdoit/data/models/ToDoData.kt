@@ -1,7 +1,8 @@
-package com.hfad.letsdoit.data
+package com.hfad.letsdoit.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.hfad.letsdoit.data.models.Priority
 
 @Entity(tableName = "todo_table")
 data class ToDoData (
