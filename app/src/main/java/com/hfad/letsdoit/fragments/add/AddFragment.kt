@@ -1,24 +1,85 @@
 package com.hfad.letsdoit.fragments.add
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.hfad.letsdoit.R
+import com.hfad.letsdoit.data.models.Priority
+import com.hfad.letsdoit.data.models.ToDoData
+import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
+import com.hfad.letsdoit.databinding.FragmentAddBinding
+import com.hfad.letsdoit.databinding.FragmentListBinding
 
 class AddFragment : Fragment() {
+
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
+    private val mToDoViewModel: ToDoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
+        val view = binding.root
         setHasOptionsMenu(true)
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
+        return view
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_fragment_menu, menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId==R.id.menuAdd){
+            insertDataToDb()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun insertDataToDb() {
+        val mTitle = binding.etTitle.text.toString()
+        val mPriority = binding.spPriorities.selectedItem.toString()
+        val mDescription = binding.etDescription.text.toString()
+        val validation = verifyDataFromUser(mTitle, mDescription)
+
+        if (validation){
+            val newData = ToDoData(
+                0,
+                mTitle,
+                parsePriority(mPriority),
+                mDescription
+            )
+            mToDoViewModel.insertData(newData)
+            Toast.makeText(requireContext(), "Successfully Added", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_addFragment_to_listFragment)
+        }else{
+            Toast.makeText(requireContext(), "Please, fill out all the fields!", Toast.LENGTH_SHORT).show()
+        }
+
+
+
+    }
+
+    private fun verifyDataFromUser(title:String, description:String):Boolean{
+        return if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
+            false
+        }else !(title.isEmpty() || description.isEmpty())
+    }
+
+    private fun parsePriority(priority: String):Priority{
+        return when (priority){
+            "High Priority"->{Priority.HIGH}
+            "High Medium"->{Priority.MEDIUM}
+            "High Low"->{Priority.LOW}
+            else->{Priority.LOW}
+        }
+
+    }
+
 
 }
