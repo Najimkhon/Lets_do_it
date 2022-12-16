@@ -29,6 +29,7 @@ class AddFragment : Fragment() {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val view = binding.root
         setHasOptionsMenu(true)
+        binding.spPriorities.onItemSelectedListener = mSharedViewModel.listener
         return view
     }
 
