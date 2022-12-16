@@ -4,7 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="description">Description</string>
     <string name="title_hint">Title</string>
-    
+    <string name="delete_all">Delete All</string>
+    <string name="priority_low">Priority Low</string>
+    <string name="priority_high">Priority High</string>
+    <string name="sort_by">Sort by</string>
+    <string name="search">Search</string>
+
     <string-array name="priorities">
         <item>High priority</item>
         <item>Medium priority</item>
