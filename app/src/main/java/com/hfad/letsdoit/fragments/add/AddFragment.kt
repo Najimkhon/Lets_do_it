@@ -13,12 +13,14 @@ import com.hfad.letsdoit.data.models.ToDoData
 import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
 import com.hfad.letsdoit.databinding.FragmentAddBinding
 import com.hfad.letsdoit.databinding.FragmentListBinding
+import com.hfad.letsdoit.fragments.SharedViewModel
 
 class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
     private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,13 +47,13 @@ class AddFragment : Fragment() {
         val mTitle = binding.etTitle.text.toString()
         val mPriority = binding.spPriorities.selectedItem.toString()
         val mDescription = binding.etDescription.text.toString()
-        val validation = verifyDataFromUser(mTitle, mDescription)
+        val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
 
         if (validation){
             val newData = ToDoData(
                 0,
                 mTitle,
-                parsePriority(mPriority),
+                mSharedViewModel.parsePriority(mPriority),
                 mDescription
             )
             mToDoViewModel.insertData(newData)
@@ -65,21 +67,7 @@ class AddFragment : Fragment() {
 
     }
 
-    private fun verifyDataFromUser(title:String, description:String):Boolean{
-        return if(TextUtils.isEmpty(title) || TextUtils.isEmpty(description)){
-            false
-        }else !(title.isEmpty() || description.isEmpty())
-    }
 
-    private fun parsePriority(priority: String):Priority{
-        return when (priority){
-            "High Priority"->{Priority.HIGH}
-            "High Medium"->{Priority.MEDIUM}
-            "High Low"->{Priority.LOW}
-            else->{Priority.LOW}
-        }
-
-    }
 
 
 }
