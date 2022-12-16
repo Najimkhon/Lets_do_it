@@ -11,4 +11,3 @@ data class ToDoData (
     val priority: Priority,
     val description:String
         )
-}
