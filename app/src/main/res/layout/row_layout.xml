@@ -12,6 +12,7 @@
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp"
         android:background = "@drawable/item_background"
+
         app:flow_horizontalBias="0.5">
 
         <androidx.cardview.widget.CardView
@@ -44,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:maximumLength="300"
+
             android:maxLines="10"
             android:textColor="@color/grey"
             android:layout_marginTop="8dp"

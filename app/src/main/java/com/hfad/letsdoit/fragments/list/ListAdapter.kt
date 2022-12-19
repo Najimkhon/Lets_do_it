@@ -1,6 +1,5 @@
 package com.hfad.letsdoit.fragments.list
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -8,10 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.models.Priority
 import com.hfad.letsdoit.data.models.ToDoData
-import com.hfad.letsdoit.databinding.FragmentListBinding
 import com.hfad.letsdoit.databinding.RowLayoutBinding
 
-class ListAdapter(private var list: List<ToDoData>, private val context: Context) :
+class ListAdapter() :
     RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
     var dataList = emptyList<ToDoData>()
@@ -30,21 +28,21 @@ class ListAdapter(private var list: List<ToDoData>, private val context: Context
         holder.rowLayoutBinding.tvTitle.text = dataList[position].title
         holder.rowLayoutBinding.tvDescription.text = dataList[position].description
         when (dataList[position].priority) {
-            Priority.HIGH -> holder.rowLayoutBinding.cvPriority.setBackgroundColor(
+            Priority.HIGH -> holder.rowLayoutBinding.cvPriority.setCardBackgroundColor(
                 ContextCompat.getColor(
-                    context,
+                    holder.rowLayoutBinding.root.context,
                     R.color.red
                 )
             )
-            Priority.MEDIUM -> holder.rowLayoutBinding.cvPriority.setBackgroundColor(
+            Priority.MEDIUM -> holder.rowLayoutBinding.cvPriority.setCardBackgroundColor(
                 ContextCompat.getColor(
-                    context,
+                    holder.rowLayoutBinding.root.context,
                     R.color.yellow
                 )
             )
-            Priority.LOW -> holder.rowLayoutBinding.cvPriority.setBackgroundColor(
+            Priority.LOW -> holder.rowLayoutBinding.cvPriority.setCardBackgroundColor(
                 ContextCompat.getColor(
-                    context,
+                    holder.rowLayoutBinding.root.context,
                     R.color.green
                 )
             )
