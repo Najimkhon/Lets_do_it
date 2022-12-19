@@ -3,6 +3,7 @@ package com.hfad.letsdoit.fragments.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.models.Priority
@@ -47,6 +48,13 @@ class ListAdapter() :
                 )
             )
         }
+
+        holder.rowLayoutBinding.itemView.setOnClickListener{
+            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+            holder.rowLayoutBinding.itemView.findNavController().navigate(action)
+        }
+
+
     }
 
     override fun getItemCount(): Int {
