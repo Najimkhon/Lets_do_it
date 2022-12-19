@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
 import com.hfad.letsdoit.databinding.FragmentListBinding
+import com.hfad.letsdoit.fragments.SharedViewModel
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
     private val adapter: ListAdapter by lazy {ListAdapter()}
 
 
@@ -27,10 +29,15 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
+            showEmptyDatabaseView(it)
+        })
+
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+            mSharedViewModel.checkIfDatabaseEmpty(it)
             adapter.setData(it)
         })
 
@@ -40,6 +47,17 @@ class ListFragment : Fragment() {
         setHasOptionsMenu(true)
 
         return view
+    }
+
+    private fun showEmptyDatabaseView(emptyDabase: Boolean) {
+        if (emptyDabase){
+            binding.ivNoData.visibility = View.VISIBLE
+            binding.tvNoData.visibility = View.VISIBLE
+        }else{
+            binding.ivNoData.visibility = View.GONE
+            binding.tvNoData.visibility = View.GONE
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

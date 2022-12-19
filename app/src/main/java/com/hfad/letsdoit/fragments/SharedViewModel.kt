@@ -7,11 +7,15 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.models.Priority
+import com.hfad.letsdoit.data.models.ToDoData
 
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
+
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
 
     val listener: AdapterView.OnItemSelectedListener = object :
     AdapterView.OnItemSelectedListener{
@@ -26,6 +30,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         override fun onNothingSelected(p0: AdapterView<*>?) {
         }
 
+    }
+
+    fun checkIfDatabaseEmpty(toDoDataList: List<ToDoData>){
+        emptyDatabase.value = toDoDataList.isEmpty()
     }
 
     fun verifyDataFromUser(title: String, description: String): Boolean {
