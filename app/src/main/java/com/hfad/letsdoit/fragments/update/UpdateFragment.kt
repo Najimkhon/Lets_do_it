@@ -1,5 +1,6 @@
 package com.hfad.letsdoit.fragments.update
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -45,6 +46,8 @@ class UpdateFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.saveUpdates) {
             updateItem()
+        }else if(item.itemId == R.id.delete){
+            deleteItem()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -68,6 +71,20 @@ class UpdateFragment : Fragment() {
         }else{
             Toast.makeText(requireContext(), "Fill all the fields", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun deleteItem(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes"){_,_->
+            mToDoViewModel.deleteItem(args.currentItem)
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            Toast.makeText(requireContext(), "Successfully Removed", Toast.LENGTH_SHORT).show()
+        }
+        builder.setNegativeButton("No"){_,_->}
+        builder.setTitle("Delete '${args.currentItem.title}'?")
+        builder.setMessage("Are you sure you want to delete '${args.currentItem.title}'?")
+        builder.create().show()
+
     }
 
 
