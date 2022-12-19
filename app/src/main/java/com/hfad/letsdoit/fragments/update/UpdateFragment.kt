@@ -2,11 +2,14 @@ package com.hfad.letsdoit.fragments.update
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hfad.letsdoit.R
-import com.hfad.letsdoit.data.models.Priority
+import com.hfad.letsdoit.data.models.ToDoData
+import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
 import com.hfad.letsdoit.databinding.FragmentUpdateBinding
 import com.hfad.letsdoit.fragments.SharedViewModel
 
@@ -16,6 +19,7 @@ class UpdateFragment : Fragment() {
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
     private val mSharedViewModel: SharedViewModel by viewModels()
+    private val mToDoViewModel: ToDoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,22 +32,43 @@ class UpdateFragment : Fragment() {
 
         binding.etCurrentTitle.setText(args.currentItem.title)
         binding.etCurrentDescription.setText(args.currentItem.description)
-        binding.spCurrentPriorities.setSelection(parsePriority(args.currentItem.priority))
+        binding.spCurrentPriorities.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         binding.spCurrentPriorities.onItemSelectedListener = mSharedViewModel.listener
         return view
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.update_fragment_menu, menu)
     }
 
-    private fun parsePriority(priority:Priority):Int{
-        return when(priority){
-            Priority.HIGH -> 0
-            Priority.MEDIUM -> 1
-            Priority.LOW -> 2
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.saveUpdates) {
+            updateItem()
         }
-
+        return super.onOptionsItemSelected(item)
     }
+
+    private fun updateItem() {
+        var spinnerValue = mSharedViewModel.parsePriority(binding.spCurrentPriorities.selectedItem.toString())
+        val validation = mSharedViewModel.verifyDataFromUser(
+            binding.etCurrentTitle.text.toString(),
+            binding.etCurrentDescription.text.toString(),
+            )
+        if (validation){
+            val updatedItem = ToDoData(
+                args.currentItem.id,
+                binding.etCurrentTitle.text.toString(),
+                spinnerValue,
+                binding.etCurrentDescription.text.toString()
+            )
+            mToDoViewModel.updateItem(updatedItem)
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            Toast.makeText(requireContext(), "Item is updated!", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(requireContext(), "Fill all the fields", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 }
