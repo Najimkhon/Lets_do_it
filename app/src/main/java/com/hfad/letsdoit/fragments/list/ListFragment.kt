@@ -1,7 +1,9 @@
 package com.hfad.letsdoit.fragments.list
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,7 +30,6 @@ class ListFragment : Fragment() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             adapter.setData(it)
         })
@@ -44,12 +45,29 @@ class ListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.deleteAll) {
+            deleteAll()
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun deleteAll(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes"){_,_->
+            mToDoViewModel.deleteAll()
+            Toast.makeText(requireContext(), "All Records are Removed", Toast.LENGTH_SHORT).show()
+        }
+        builder.setNegativeButton("No"){_,_->}
+        builder.setTitle("Delete All Records?")
+        builder.setMessage("Are you sure you want to delete all records?")
+        builder.create().show()
     }
 
 }
