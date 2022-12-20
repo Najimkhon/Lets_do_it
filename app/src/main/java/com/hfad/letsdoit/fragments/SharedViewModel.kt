@@ -15,7 +15,7 @@ import com.hfad.letsdoit.data.models.ToDoData
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
-    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val listener: AdapterView.OnItemSelectedListener = object :
     AdapterView.OnItemSelectedListener{
