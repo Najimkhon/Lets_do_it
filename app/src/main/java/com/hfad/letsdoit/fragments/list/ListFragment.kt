@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,10 +19,9 @@ import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
 import com.hfad.letsdoit.databinding.FragmentListBinding
 import com.hfad.letsdoit.fragments.SharedViewModel
 import com.hfad.letsdoit.fragments.list.adapter.ListAdapter
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val mToDoViewModel: ToDoViewModel by viewModels()
@@ -102,8 +102,28 @@ class ListFragment : Fragment() {
 
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null){
+            searchDatabase(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null){
+            searchDatabase(query)
+        }
+        return true
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
+
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.deleteAll) {
@@ -127,5 +147,17 @@ class ListFragment : Fragment() {
         builder.setMessage("Are you sure you want to delete all records?")
         builder.create().show()
     }
+
+    private fun searchDatabase(query: String?) {
+        var searchQuery = "%$query%"
+
+        mToDoViewModel.searchThroughDatabase(searchQuery).observe(this, Observer { list->
+            list?.let {
+                adapter.setData(it)
+            }
+        })
+    }
+
+
 
 }
