@@ -4,12 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.models.Priority
 import com.hfad.letsdoit.data.models.ToDoData
 import com.hfad.letsdoit.databinding.RowLayoutBinding
 import com.hfad.letsdoit.fragments.list.ListFragmentDirections
+
 
 class ListAdapter() :
     RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
@@ -64,8 +66,10 @@ class ListAdapter() :
     }
 
     fun setData(toDoData: List<ToDoData>){
+        val toDoDiffUtil = ToDoDiffUtil(dataList, toDoData)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
         this.dataList = toDoData
-        notifyDataSetChanged()
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 
     inner class MyViewHolder(val rowLayoutBinding: RowLayoutBinding) :
