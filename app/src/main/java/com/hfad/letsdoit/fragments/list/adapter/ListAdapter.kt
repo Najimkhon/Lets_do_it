@@ -1,4 +1,4 @@
-package com.hfad.letsdoit.fragments.list
+package com.hfad.letsdoit.fragments.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,13 +9,14 @@ import com.hfad.letsdoit.R
 import com.hfad.letsdoit.data.models.Priority
 import com.hfad.letsdoit.data.models.ToDoData
 import com.hfad.letsdoit.databinding.RowLayoutBinding
+import com.hfad.letsdoit.fragments.list.ListFragmentDirections
 
 class ListAdapter() :
     RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
     var dataList = emptyList<ToDoData>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             RowLayoutBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -25,7 +26,7 @@ class ListAdapter() :
         )
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.rowLayoutBinding.tvTitle.text = dataList[position].title
         holder.rowLayoutBinding.tvDescription.text = dataList[position].description
         when (dataList[position].priority) {
@@ -50,7 +51,8 @@ class ListAdapter() :
         }
 
         holder.rowLayoutBinding.itemView.setOnClickListener{
-            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+            val action =
+                ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.rowLayoutBinding.itemView.findNavController().navigate(action)
         }
 

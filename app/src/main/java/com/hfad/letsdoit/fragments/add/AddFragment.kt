@@ -63,9 +63,11 @@ class AddFragment : Fragment() {
         }else{
             Toast.makeText(requireContext(), "Please, fill out all the fields!", Toast.LENGTH_SHORT).show()
         }
+    }
 
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 

@@ -6,6 +6,7 @@ plugins {
     id 'androidx.navigation.safeargs' version '2.4.1' apply false
 }
 
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

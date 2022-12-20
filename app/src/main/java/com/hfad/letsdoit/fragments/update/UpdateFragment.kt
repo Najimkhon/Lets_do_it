@@ -16,7 +16,7 @@ import com.hfad.letsdoit.fragments.SharedViewModel
 
 class UpdateFragment : Fragment() {
 
-    private val args by navArgs<UpdateFragmentArgs>()
+    val args by navArgs<UpdateFragmentArgs>()
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -29,7 +29,9 @@ class UpdateFragment : Fragment() {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        //binding.args = args
         val view = binding.root
+
 
         binding.etCurrentTitle.setText(args.currentItem.title)
         binding.etCurrentDescription.setText(args.currentItem.description)
@@ -37,6 +39,11 @@ class UpdateFragment : Fragment() {
         binding.spCurrentPriorities.onItemSelectedListener = mSharedViewModel.listener
         return view
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
