@@ -126,8 +126,10 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         searchView?.setOnQueryTextListener(this)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.deleteAll) {
-            deleteAll()
+        when(item.itemId){
+            R.id.deleteAll -> deleteAll()
+            R.id.priorityHigh -> mToDoViewModel.sortByHighPriority.observe(this, Observer { adapter.setData(it) })
+            R.id.priorityLow -> mToDoViewModel.sortByLowPriority.observe(this, Observer { adapter.setData(it) })
         }
         return super.onOptionsItemSelected(item)
     }
