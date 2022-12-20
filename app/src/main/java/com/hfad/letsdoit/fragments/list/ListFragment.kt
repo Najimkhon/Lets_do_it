@@ -18,6 +18,8 @@ import com.hfad.letsdoit.data.viewmodel.ToDoViewModel
 import com.hfad.letsdoit.databinding.FragmentListBinding
 import com.hfad.letsdoit.fragments.SharedViewModel
 import com.hfad.letsdoit.fragments.list.adapter.ListAdapter
+import jp.wasabeef.recyclerview.animators.LandingAnimator
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -58,6 +60,9 @@ class ListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         swipeToDelete(recyclerView)
+        recyclerView.itemAnimator = SlideInUpAnimator().apply {
+            addDuration = 300
+        }
     }
 
     private fun restoreDeletedData(view: View, deletedItem: ToDoData, position: Int){
